@@ -7,479 +7,633 @@
 <title>Timer</title>
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="icon-192.png">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-:root{
-  --bg:#E8ECEF; --surface:#F7F8F9; --ink:#141D26; --steel:#5A6A78; --line:#CBD3DA;
-  --accent:#F4B400; --accent-ink:#141D26; --pos:#1C7A4B; --neg:#B23B25;
-  --bar:#2B3B4A; --track:#D9DFE4; --syg:#B23B25; --fri:#4A7FA8;
-  --display:'Barlow Condensed','Arial Narrow',sans-serif;
-  --body:'Barlow',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
-}
-@media (prefers-color-scheme:dark){
-  :root{
-    --bg:#10161C; --surface:#1A222A; --ink:#EEF1F3; --steel:#93A2AF; --line:#2C3843;
-    --pos:#5CC48C; --neg:#F0806B; --bar:#9DB9D0; --track:#26313B; --syg:#F0806B; --fri:#7FB0D6;
-  }
-}
+:root{--bg:#E8ECEF;--sf:#F7F8F9;--ink:#141D26;--st:#5A6A78;--ln:#CBD3DA;--ac:#F4B400;--ac-text:#8A6400;--pos:#1C7A4B;--neg:#B23B25;--bar:#2B3B4A;--tr:#D9DFE4;--sw:#2F6FB2;--pink:#C2447B;--dp:'Barlow Condensed','Arial Narrow',sans-serif}
+@media(prefers-color-scheme:dark){:root{--bg:#10161C;--sf:#1A222A;--ink:#EEF1F3;--st:#93A2AF;--ln:#2C3843;--ac-text:#F4B400;--pos:#5CC48C;--neg:#F0806B;--bar:#9DB9D0;--tr:#26313B;--sw:#6FA8DC;--pink:#F2A7BE}}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html{background:var(--bg)}
-body{
-  margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.35;
-  padding:calc(env(safe-area-inset-top,0px) + 12px) 16px calc(env(safe-area-inset-bottom,0px) + 32px);
-}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.35 Barlow,system-ui,sans-serif;padding:calc(env(safe-area-inset-top,0px) + 12px) 16px calc(env(safe-area-inset-bottom,0px) + 92px)}
 main{max-width:480px;margin:0 auto}
 button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer}
-button:focus-visible,input:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--ac);outline-offset:2px}
 [hidden]{display:none!important}
-
-.top{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
-.nav{width:48px;height:48px;border-radius:12px;font-size:30px;line-height:1;color:var(--steel)}
-.nav:active{background:var(--track)}
-.wk{text-align:center}
-.wk-title{font-family:var(--display);font-weight:600;font-size:26px;line-height:1}
-.wk-sub{color:var(--steel);font-size:14px;margin-top:2px}
-.back{display:block;margin:0 auto 14px;padding:8px 14px;border-radius:999px;background:var(--track);font-weight:500;font-size:14px}
-
-.today{background:var(--surface);border-radius:22px;padding:20px 20px 16px;margin-bottom:14px}
-.today-date{color:var(--steel);font-size:15px}
-.hero{display:flex;align-items:baseline;gap:10px;margin:2px 0 0}
-.hero-num{font-family:var(--display);font-weight:600;font-size:104px;line-height:.9;letter-spacing:-1px;font-variant-numeric:tabular-nums}
-.hero-unit{font-family:var(--display);font-weight:500;font-size:28px;color:var(--steel)}
-.hero-sub{color:var(--steel);min-height:1.35em;margin:6px 0 16px}
-.go{
-  width:100%;height:68px;border-radius:16px;font-family:var(--display);font-weight:600;font-size:28px;
-  background:var(--accent);color:var(--accent-ink);transition:transform .08s;
-}
-.go:active{transform:scale(.985)}
-.go.stop{background:var(--ink);color:var(--surface)}
-.go.done{background:var(--track);color:var(--steel);cursor:default}
-.lunch{display:flex;align-items:center;gap:14px;margin-top:14px;padding:10px 4px;font-size:17px;font-weight:500}
-.lunch.off{opacity:.45}
-.chk{
-  -webkit-appearance:none;appearance:none;position:relative;flex:none;width:30px;height:30px;margin:0;
-  border:2px solid var(--ink);border-radius:8px;background:transparent;
-}
+.card{background:var(--sf);border-radius:22px;padding:18px 16px;margin-bottom:14px}
+.mut{color:var(--st);font-size:14px}
+.big{font:600 96px/.9 var(--dp);font-variant-numeric:tabular-nums}
+.go{width:100%;height:66px;border-radius:16px;font:600 28px var(--dp);background:var(--ac);color:#141D26;margin-top:14px}
+.go.stop{background:var(--ink);color:var(--sf)}
+.go.switch{background:var(--sw);color:#fff}
+.row2{display:flex;gap:8px;margin-top:10px}
+.b2{flex:1;height:48px;border-radius:12px;background:var(--bg);font-weight:600}
+.lunch{display:flex;align-items:center;gap:12px;margin-top:12px;font-weight:500}
+.chk{-webkit-appearance:none;appearance:none;position:relative;width:28px;height:28px;margin:0;border:2px solid var(--ink);border-radius:8px;flex:none}
 .chk:checked{background:var(--ink)}
-.chk:checked::after{
-  content:"";position:absolute;left:8px;top:2px;width:7px;height:15px;
-  border:solid var(--surface);border-width:0 3px 3px 0;transform:rotate(45deg);
-}
-.link{color:var(--steel);text-decoration:underline;text-underline-offset:3px;font-size:14px;padding:8px 0}
-
-.week{background:var(--surface);border-radius:22px;padding:18px 16px 8px;margin-bottom:14px}
-.sum{display:flex;justify-content:space-between;align-items:flex-end;padding:0 4px 14px;border-bottom:1px solid var(--line)}
-.sum-num{font-family:var(--display);font-weight:600;font-size:52px;line-height:.9;font-variant-numeric:tabular-nums}
-.sum-of{font-family:var(--display);font-size:22px;color:var(--steel);margin-left:6px}
-.sum-l{color:var(--steel);font-size:14px;margin-top:4px}
-.saldo{text-align:right}
-.saldo-num{font-family:var(--display);font-weight:600;font-size:34px;line-height:1;font-variant-numeric:tabular-nums}
-.pos{color:var(--pos)} .neg{color:var(--neg)}
-.rows{margin-top:6px}
-.row{
-  display:grid;grid-template-columns:52px 1fr 60px;gap:10px;align-items:center;width:100%;text-align:left;
-  padding:10px 4px 10px 8px;border-radius:12px;position:relative;
-}
-.row:active{background:var(--bg)}
-.row.today-row::before{content:"";position:absolute;left:0;top:10px;bottom:10px;width:3px;border-radius:2px;background:var(--accent)}
-.d-name{font-weight:600}
-.d-date{color:var(--steel);font-size:13px}
-.track{position:relative;height:14px;border-radius:4px;background:var(--track);overflow:visible}
-.fill{position:absolute;left:0;top:0;bottom:0;border-radius:4px;background:var(--bar);min-width:0}
-.fill.syg{background:repeating-linear-gradient(45deg,var(--syg) 0 3px,transparent 3px 7px)}
-.fill.fri{background:repeating-linear-gradient(45deg,var(--fri) 0 3px,transparent 3px 7px)}
-.fill.syg,.fill.fri{box-shadow:inset 0 0 0 1.5px currentColor}
-.fill.syg{color:var(--syg)} .fill.fri{color:var(--fri)}
-.tick{position:absolute;top:-4px;bottom:-4px;width:2px;background:var(--ink);opacity:.55}
-.d-sub{color:var(--steel);font-size:13px;margin-top:6px}
-.d-val{font-family:var(--display);font-weight:600;font-size:24px;text-align:right;font-variant-numeric:tabular-nums}
-.d-val.none{color:var(--steel);font-weight:500}
-.legend{display:flex;gap:16px;color:var(--steel);font-size:12.5px;padding:8px 8px 12px}
-
-.actions{display:flex;gap:10px}
-.btn2{flex:1;height:52px;border-radius:14px;background:var(--surface);font-weight:600}
-.btn2:active{background:var(--track)}
-.foot{color:var(--steel);font-size:13px;text-align:center;margin-top:16px}
-
-dialog{
-  margin:auto auto 0;width:100%;max-width:480px;max-height:92dvh;overflow:auto;border:0;
-  border-radius:22px 22px 0 0;padding:20px 20px calc(env(safe-area-inset-bottom,0px) + 20px);
-  background:var(--surface);color:var(--ink);
-}
+.chk:checked::after{content:"";position:absolute;left:8px;top:2px;width:7px;height:14px;border:solid var(--sf);border-width:0 3px 3px 0;transform:rotate(45deg)}
+.top{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.nav{width:46px;height:46px;font-size:28px;color:var(--st)}
+.ttl{font:600 24px var(--dp);text-align:center}
+.seg{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;background:var(--tr);border-radius:12px;padding:4px;margin-bottom:12px}
+.seg button{padding:10px 2px;border-radius:9px;font-weight:600;font-size:14px}
+.seg .on{background:var(--ink);color:var(--sf)}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px}
+.cell{background:var(--sf);border-radius:14px;padding:10px 12px}
+.cell b{display:block;font:600 22px var(--dp);font-variant-numeric:tabular-nums}
+.pos{color:var(--pos)}.neg{color:var(--neg)}
+.item{display:grid;grid-template-columns:54px 1fr 56px;gap:10px;align-items:center;width:100%;text-align:left;padding:9px 4px;border-bottom:1px solid var(--ln)}
+.item:last-child{border:0}
+.trk{position:relative;height:12px;border-radius:4px;background:var(--tr);overflow:hidden}
+.fl{position:absolute;top:0;bottom:0}
+.tk{position:absolute;top:-3px;bottom:-3px;width:2px;background:var(--ink);opacity:.6;z-index:2}
+.val{font:600 22px var(--dp);text-align:right}
+.seg1{display:flex;justify-content:space-between;width:100%;padding:10px 12px;margin-top:6px;border-radius:12px;background:var(--bg);text-align:left;gap:10px}
+.seg1 span{min-width:0}
+nav.tabs{position:fixed;left:0;right:0;bottom:0;display:flex;background:var(--sf);border-top:1px solid var(--ln);padding:8px 8px calc(env(safe-area-inset-bottom,0px) + 8px)}
+nav.tabs button{flex:1;height:52px;border-radius:12px;font-weight:600;color:var(--st)}
+nav.tabs .on{color:var(--ink);background:var(--tr)}
+dialog{margin:auto auto 0;width:100%;max-width:480px;max-height:92dvh;overflow:auto;border:0;border-radius:22px 22px 0 0;padding:18px 18px 28px;background:var(--sf);color:var(--ink)}
 dialog::backdrop{background:rgba(10,16,22,.55)}
-dialog h2{font-family:var(--display);font-weight:600;font-size:28px;margin:0 0 14px}
-.field{display:block;margin-bottom:14px}
-.field>span{display:block;font-size:14px;color:var(--steel);margin-bottom:5px}
-.inp{
-  width:100%;height:50px;border-radius:12px;border:1.5px solid var(--line);background:var(--bg);color:var(--ink);
-  padding:0 12px;font:inherit;font-size:18px;
-}
-.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.seg{display:grid;grid-template-columns:repeat(3,1fr);background:var(--bg);border-radius:12px;padding:4px;margin-bottom:14px}
-.seg input{position:absolute;opacity:0;pointer-events:none}
-.seg label{text-align:center;padding:12px 0;border-radius:9px;font-weight:600;cursor:pointer}
-.seg input:checked+label{background:var(--ink);color:var(--surface)}
-.seg input:focus-visible+label{outline:3px solid var(--accent)}
-.dlg-actions{display:flex;gap:10px;margin-top:6px}
-.dlg-actions button{height:52px;border-radius:14px;font-weight:600;padding:0 18px}
-.save{flex:1;background:var(--accent);color:var(--accent-ink);font-family:var(--display);font-size:22px}
-.cancel{background:var(--bg)}
-.del{color:var(--neg);background:transparent}
-.del.arm{background:var(--neg);color:#fff}
-
-.toast{
-  position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 24px);transform:translate(-50%,20px);
-  background:var(--ink);color:var(--surface);padding:12px 18px;border-radius:12px;max-width:90%;
-  opacity:0;pointer-events:none;transition:.2s;z-index:10;font-weight:500;
-}
-.toast.show{opacity:1;transform:translate(-50%,0)}
-.busy{position:fixed;top:0;left:0;right:0;height:3px;background:var(--accent);transform-origin:left;animation:load 1s infinite;z-index:11}
-@keyframes load{0%{transform:scaleX(0)}70%{transform:scaleX(1);opacity:1}100%{transform:scaleX(1);opacity:0}}
-@media (prefers-reduced-motion:reduce){.busy{animation:none}.go,.toast{transition:none}}
+h2{font:600 26px var(--dp);margin:0 0 12px}
+.fld{display:block;margin-bottom:12px}.fld span{display:block;font-size:14px;color:var(--st);margin-bottom:4px}
+.inp{width:100%;height:48px;border-radius:12px;border:1.5px solid var(--ln);background:var(--bg);color:var(--ink);padding:0 12px;font:inherit;font-size:18px;display:flex;align-items:center}
+input.inp,select.inp{display:block}
+select.inp{-webkit-appearance:none;appearance:none;background-image:linear-gradient(45deg,transparent 50%,var(--st) 50%),linear-gradient(135deg,var(--st) 50%,transparent 50%);background-position:calc(100% - 20px) center,calc(100% - 15px) center;background-size:5px 5px,5px 5px;background-repeat:no-repeat;padding-right:36px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.acts{display:flex;gap:10px;margin-top:8px}
+.acts button{height:50px;border-radius:14px;font-weight:600;padding:0 16px}
+.save{flex:1;background:var(--tr);color:var(--st);transition:background .15s,color .15s}
+.save.dirty{background:var(--ac);color:#141D26}
+.cx{background:var(--bg)}.del{color:var(--neg)}.del.arm{background:var(--neg);color:#fff}
+.toast{position:fixed;left:50%;bottom:96px;transform:translateX(-50%);background:var(--ink);color:var(--sf);padding:12px 18px;border-radius:12px;max-width:90%;z-index:20}
+.busy{position:fixed;top:0;left:0;right:0;height:3px;background:var(--ac);z-index:30}
+.warn{color:var(--neg);font-weight:600;margin-top:10px}
+.banner{margin-top:10px;padding:12px;border-radius:14px;background:var(--neg);color:#fff}
+.banner button{margin-top:8px;background:#fff;color:var(--neg);height:44px;border-radius:12px;font-weight:700;width:100%}
+.link2{display:block;width:100%;text-align:center;margin-top:10px;color:var(--st);font-size:13px;text-decoration:underline;background:none;border:0;padding:6px 0}
+.ferie-picker{margin-top:14px}
+.fillrest{margin-top:14px;padding:14px;border-radius:14px;background:var(--tr)}
+.fillrest .ttl2{font-weight:600;margin-bottom:4px}
 </style>
 </head>
 <body>
 <div class="busy" id="busy" hidden></div>
 <main>
-  <header class="top">
-    <button class="nav" id="prev" aria-label="Forrige uge">&lsaquo;</button>
-    <div class="wk"><div class="wk-title" id="wkTitle">Uge</div><div class="wk-sub" id="wkSub">Henter&hellip;</div></div>
-    <button class="nav" id="next" aria-label="Næste uge">&rsaquo;</button>
-  </header>
-
-  <button class="back" id="back" hidden>Tilbage til denne uge</button>
-
-  <section class="today" id="today" hidden>
-    <div class="today-date" id="todayDate"></div>
-    <div class="hero"><span class="hero-num" id="heroNum">0,00</span><span class="hero-unit">timer</span></div>
-    <div class="hero-sub" id="heroSub"></div>
-    <button class="go" id="go">Start dagen</button>
-    <label class="lunch" id="lunchRow"><input type="checkbox" class="chk" id="lunch"><span id="lunchTxt">Frokost (30 min)</span></label>
-    <button class="link" id="resume" hidden>Genoptag dagen</button>
-  </section>
-
-  <section class="week">
-    <div class="sum">
-      <div>
-        <div><span class="sum-num" id="sumNum">0,00</span><span class="sum-of" id="sumOf"></span></div>
-        <div class="sum-l">Timer denne uge</div>
-      </div>
-      <div class="saldo">
-        <div class="saldo-num" id="saldo">0,00</div>
-        <div class="sum-l">Plus/minus hidtil</div>
-      </div>
+<!-- I DAG -->
+<section id="v-today">
+  <div class="card">
+    <div class="top" style="margin:0"><div class="mut" id="tDate"></div>
+      <button class="b2" id="copy" style="flex:none;padding:0 14px;height:42px">Kopiér</button>
     </div>
-    <div class="rows" id="rows"></div>
-    <div class="legend">
-      <span>Lodret streg: normtid pr. dag</span>
-    </div>
-  </section>
+    <div><span class="big" id="tNum">0,00</span> <span class="mut" id="tNumLabel">timer arbejde</span></div>
+    <div class="mut" id="tSub" style="margin-top:6px"></div>
+    <div class="warn" id="tFlag" hidden>⚠ Lang dag</div>
 
-  <div class="actions">
-    <button class="btn2" id="add">Tilføj eller ret dag</button>
-    <button class="btn2" id="cfg">Normuge</button>
+    <div class="fillrest" id="tFillRest" hidden>
+      <div class="ttl2" id="tFillRestTxt"></div>
+      <div class="row2">
+        <button class="b2" data-fill="Syg">Syg</button>
+        <button class="b2" data-fill="Barn syg">Barn syg</button>
+        <button class="b2" data-fill="Flex">Flex</button>
+      </div>
+      <button class="link2" id="tFillRestDismiss" style="margin-top:8px">Ikke i dag</button>
+    </div>
+
+    <label class="fld" style="margin-top:14px"><span>Aktivitet</span>
+      <select class="inp" id="actType">
+        <option value="Arbejde">Arbejde</option>
+        <option value="Syg">Syg</option>
+        <option value="Barn syg">Barn syg</option>
+        <option value="Flex">Flex</option>
+        <option value="Ferie">Ferie</option>
+      </select>
+    </label>
+
+    <button class="go" id="go">Stempel ind</button>
+
+    <div class="ferie-picker" id="feriePicker" hidden>
+      <div class="two">
+        <label class="fld"><span>Fra</span><input class="inp" type="date" id="fFra"></label>
+        <label class="fld"><span>Til</span><input class="inp" type="date" id="fTil"></label>
+      </div>
+      <div class="mut" id="feriePrev" style="margin:-4px 0 12px"></div>
+      <button class="go" id="feriegem">Registrer ferie</button>
+    </div>
+
+    <label class="lunch" id="lunchRow"><input type="checkbox" class="chk" id="lunch"><span id="lunchTxt">Frokost</span></label>
+    <div class="banner" id="tBanner" hidden><div id="tBannerTxt"></div><button id="tBannerBtn">Afslut dagen nu</button></div>
   </div>
-  <p class="foot" id="foot"></p>
+  <div class="card"><div class="mut">Dagens stykker</div><div id="tSegs"></div>
+    <button class="link2" id="addPiece" style="margin-top:4px">+ Tilføj stykke manuelt</button>
+    <div class="mut" id="tWeek" style="margin-top:12px"></div>
+  </div>
+</section>
+
+<!-- OVERSIGT -->
+<section id="v-ov" hidden>
+  <div class="seg" id="ovP"><button data-p="week">Uge</button><button data-p="month">Måned</button><button data-p="year">År</button></div>
+  <div class="top"><button class="nav" id="ovPrev">&lsaquo;</button><div class="ttl" id="ovTtl"></div><button class="nav" id="ovNext">&rsaquo;</button></div>
+  <div class="grid" id="ovSum"></div>
+  <div class="card" id="ovList" style="padding:8px 12px"></div>
+</section>
+
+<!-- INDSTILLINGER -->
+<section id="v-cfg" hidden>
+  <div class="card">
+    <h2>Norm pr. dag</h2>
+    <div id="cRows"></div>
+    <div style="font-weight:600" id="cSum"></div>
+  </div>
+  <div class="card">
+    <h2>Frokost</h2>
+    <label class="fld"><span>Frokostens længde (minutter)</span><input class="inp" id="cLunch" inputmode="numeric"></label>
+    <div class="mut">Frokost som standard på disse dage</div>
+    <div id="cPlan"></div>
+  </div>
+  <div class="card">
+    <h2>Lang dag</h2>
+    <label class="lunch"><input type="checkbox" class="chk" id="cLongOn"><span>Advarsel ved lange arbejdsdage</span></label>
+    <label class="fld" style="margin-top:12px"><span>Grænse (timer arbejde)</span><input class="inp" id="cLongMax" inputmode="decimal"></label>
+  </div>
+  <div class="card">
+    <h2>Feriedage</h2>
+    <label class="fld"><span>Feriedage pr. år</span><input class="inp" id="cFerie" inputmode="numeric"></label>
+    <div class="mut" id="cFerieUsed"></div>
+  </div>
+  <div class="acts" style="margin-bottom:8px"><button class="save" id="cSave" style="width:100%">Gem indstillinger</button></div>
+</section>
 </main>
 
+<nav class="tabs"><button data-t="today">I dag</button><button data-t="ov">Oversigt</button><button data-t="cfg">Indstillinger</button></nav>
+
 <dialog id="dlg">
-  <h2 id="dlgTitle">Ret dag</h2>
-  <label class="field"><span>Dato</span><input class="inp" type="date" id="fDate"></label>
-  <div class="seg" role="radiogroup" aria-label="Type">
-    <input type="radio" name="fType" id="tA" value="Arbejde"><label for="tA">Arbejde</label>
-    <input type="radio" name="fType" id="tS" value="Syg"><label for="tS">Syg</label>
-    <input type="radio" name="fType" id="tF" value="Fri"><label for="tF">Fri</label>
-  </div>
-  <div id="workFields">
-    <div class="two">
-      <label class="field"><span>Start</span><input class="inp" type="time" id="fStart"></label>
-      <label class="field"><span>Slut</span><input class="inp" type="time" id="fSlut"></label>
+  <h2 id="dTtl">Dag</h2>
+  <label class="fld"><span>Dato</span><input class="inp" type="date" id="fDate"></label>
+  <div id="dSegs" style="margin-bottom:12px"></div>
+
+  <div class="fillrest" id="dFillRest" hidden>
+    <div class="ttl2" id="dFillRestTxt"></div>
+    <div class="row2">
+      <button class="b2" data-dfill="Syg">Syg</button>
+      <button class="b2" data-dfill="Barn syg">Barn syg</button>
+      <button class="b2" data-dfill="Flex">Flex</button>
     </div>
-    <label class="lunch" style="margin-top:0"><input type="checkbox" class="chk" id="fLunch"><span id="fLunchTxt">Frokost</span></label>
   </div>
-  <div id="hoursFields" hidden>
-    <label class="field"><span>Timer</span><input class="inp" type="text" inputmode="decimal" id="fHours" placeholder="7,4"></label>
-  </div>
-  <div class="dlg-actions">
-    <button class="del" id="fDel" hidden>Slet dag</button>
-    <button class="cancel" id="fCancel">Annuller</button>
-    <button class="save" id="fSave">Gem</button>
-  </div>
-</dialog>
 
-<dialog id="dlgNorm">
-  <h2>Normuge</h2>
-  <label class="field"><span>Timer pr. uge (fordeles på fem dage)</span><input class="inp" type="text" inputmode="decimal" id="nNorm"></label>
-  <div class="dlg-actions">
-    <button class="cancel" id="nCancel">Annuller</button>
-    <button class="save" id="nSave">Gem</button>
+  <div class="seg" id="fType" style="grid-template-columns:repeat(3,1fr);grid-auto-flow:row" role="radiogroup" aria-label="Type">
+    <button data-y="Arbejde">Arbejde</button><button data-y="Syg">Syg</button><button data-y="Barn syg">Barn syg</button>
+    <button data-y="Flex">Flex</button><button data-y="Ferie">Ferie</button>
   </div>
+  <div id="tMode" class="seg" style="grid-template-columns:repeat(2,1fr)" hidden role="radiogroup" aria-label="Indtastningsmåde">
+    <button data-m="time" type="button">Tidsrum</button><button data-m="hours" type="button">Timetal</button>
+  </div>
+  <div id="timeFields"><div class="two"><label class="fld"><span>Start</span><input class="inp" type="time" id="fStart"></label><label class="fld"><span>Slut</span><input class="inp" type="time" id="fSlut"></label></div></div>
+  <div class="mut" id="fCalc" style="margin:-6px 0 12px" hidden></div>
+  <div id="lunchField"><label class="lunch" style="margin-top:0"><input type="checkbox" class="chk" id="fLunch"><span id="fLunchTxt">Frokost</span></label></div>
+  <div id="hF"><label class="fld"><span>Timer</span><input class="inp" id="fHours" inputmode="decimal" placeholder="7,4"></label>
+    <button class="b2" id="fRest" style="width:100%;margin-bottom:8px">Fyld op til dagens norm</button></div>
+  <div id="vF" hidden><label class="fld"><span>Hel feriedag</span><div class="inp" id="vHours">–</div></label></div>
+  <label class="fld"><span>Note (valgfrit)</span><input class="inp" id="fNote" maxlength="200" placeholder="fx kursus, møde ude af huset"></label>
+  <div class="warn" id="dErr" hidden></div>
+  <div class="acts"><button class="del" id="fDel" hidden>Slet</button><button class="cx" id="fCx">Annuller</button><button class="save" id="fSave">Gem</button></div>
 </dialog>
-
-<div class="toast" id="toast" role="status"></div>
+<div class="toast" id="toast" hidden></div>
 
 <script>
-/* ---------- Opsætning af forbindelse til Google-scriptet ---------- */
-var BASE = 'https://script.google.com/macros/s/AKfycbzNMvymw7Y0EQ_obqlUYCcz_t68LWhkPbNtmT5TNNTi9qaowQ3MA7tqCkD2NAbRFsJmCQ/exec';
-
-function getKey() {
-  var k = localStorage.getItem('trKey');
-  if (!k) {
-    k = window.prompt('Indtast adgangskode:');
-    if (k) localStorage.setItem('trKey', k.trim());
-  }
+var BASE='https://script.google.com/macros/s/AKfycbzNMvymw7Y0EQ_obqlUYCcz_t68LWhkPbNtmT5TNNTi9qaowQ3MA7tqCkD2NAbRFsJmCQ/exec';
+function getKey(){
+  var k=localStorage.getItem('trKey');
+  if(!k){k=window.prompt('Indtast adgangskode:');if(k)localStorage.setItem('trKey',k.trim());}
   return k;
 }
 
-var S = null, seq = 0, armed = false;
-var $ = function (id) { return document.getElementById(id); };
-var DAY = ['Man', 'Tirs', 'Ons', 'Tors', 'Fre', 'Lør', 'Søn'];
-var DAYLONG = ['Mandag', 'Tirsdag', 'Onsdag', 'Torsdag', 'Fredag', 'Lørdag', 'Søndag'];
-var MON = ['jan', 'feb', 'mar', 'apr', 'maj', 'jun', 'jul', 'aug', 'sep', 'okt', 'nov', 'dec'];
-
-function fmt(h) { return h.toFixed(2).replace('.', ','); }
-function fmtS(h) { return (h >= 0 ? '+' : '\u2212') + fmt(Math.abs(h)); }
-function hm(h) { var m = Math.round(h * 60); return Math.floor(m / 60) + ' t ' + String(m % 60).padStart(2, '0') + ' min'; }
-function pad(n) { return String(n).padStart(2, '0'); }
-function nowHM() { var n = new Date(); return pad(n.getHours()) + ':' + pad(n.getMinutes()); }
-function parts(ds) { return ds.split('-').map(Number); }
-function dnum(ds) { return parts(ds)[2] + '. ' + MON[parts(ds)[1] - 1]; }
-function toMin(t) { var m = /^(\d{1,2}):(\d{2})/.exec(t || ''); return m ? (+m[1]) * 60 + (+m[2]) : null; }
-function calc(start, slut, lunch) {
-  var s = toMin(start), e = toMin(slut); if (s === null || e === null) return null;
-  var d = e - s; if (d < 0) d += 1440; return Math.max(0, (d - (lunch || 0)) / 60);
+var D=null,M={},tab='today',ov={p:'week',ref:null},seq=0,edit=0,fType='Arbejde',fMode=null,armed=false,copyIdx=0,dropSel='Arbejde',dismissedToday=false;
+var $=function(i){return document.getElementById(i)};
+var DN=['Man','Tirs','Ons','Tors','Fre','Lør','Søn'],DL=['Mandag','Tirsdag','Onsdag','Torsdag','Fredag','Lørdag','Søndag'];
+var MN=['januar','februar','marts','april','maj','juni','juli','august','september','oktober','november','december'];
+var KEY={Arbejde:'a',Syg:'s','Barn syg':'b',Flex:'f',Ferie:'v'};
+var COPY_ORDER=['Arbejde','Syg','Barn syg','Flex','Ferie'];
+var SEG_ORDER=['Arbejde','Syg','Barn syg','Flex','Ferie'];
+var TCOL={Arbejde:'var(--sw)',Syg:'var(--neg)','Barn syg':'var(--pink)',Flex:'var(--pos)',Ferie:'var(--ac)'};
+var TTXT={Arbejde:'var(--sw)',Syg:'var(--neg)','Barn syg':'var(--pink)',Flex:'var(--pos)',Ferie:'var(--ac-text)'};
+var fmt=function(h){return h.toFixed(2).replace('.',',')};
+var fmtN=function(h){return fmt(h).replace(/,00$/,'').replace(/(,\d)0$/,'$1')};
+var sg=function(h){return(h>=0?'+':'\u2212')+fmt(Math.abs(h))};
+var pad=function(n){return String(n).padStart(2,'0')};
+function fmtDays(h){var x=h.toFixed(3).replace(/0+$/,'').replace(/\.$/,'');if(x===''||x==='-'||x==='-0')x='0';return x.replace('.',',')}
+function U(s){var p=s.split('-').map(Number);return new Date(Date.UTC(p[0],p[1]-1,p[2]))}
+function S_(d){return d.toISOString().slice(0,10)}
+function add(s,n){var d=U(s);d.setUTCDate(d.getUTCDate()+n);return S_(d)}
+function wd(s){return(U(s).getUTCDay()+6)%7}
+function isoWk(s){var t=U(add(s,3-wd(s))),j=new Date(Date.UTC(t.getUTCFullYear(),0,1));return Math.ceil(((t-j)/864e5+1)/7)}
+function normOf(w){return w<5?D.norms[w]:0}
+function isAbsenceType(t){return t==='Syg'||t==='Barn syg'||t==='Flex'}
+function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+function toMin(t){var m=/^(\d{1,2}):(\d{2})/.exec(t||'');return m?(+m[1])*60+(+m[2]):null}
+function calc(start,slut,lunch){var s=toMin(start),e=toMin(slut);if(s===null||e===null)return null;var d=e-s;if(d<0)d+=1440;return Math.max(0,(d-(lunch||0))/60)}
+function live(r){var p=r.date.split('-').map(Number),t=r.start.split(':').map(Number);return Math.max(0,((Date.now()-new Date(p[0],p[1]-1,p[2],t[0],t[1]))/6e4-(r.lunch||0))/60)}
+function hrs(r){return r.open?live(r):(r.hours||0)}
+function emptyBucket(){return{a:0,s:0,b:0,f:0,v:0,rows:[]}}
+function build(){M={};D.rows.forEach(function(r){var b=M[r.date]||(M[r.date]=emptyBucket());b[KEY[r.type]]+=hrs(r);b.rows.push(r)})}
+function agg(from,to){
+  var o={a:0,s:0,b:0,f:0,v:0,norm:0,saldo:0},k=Object.keys(M).sort();if(!k.length)return o;
+  var last=M[D.today]?D.today:add(D.today,-1),d=from>k[0]?from:k[0],e=to<last?to:last;
+  for(;d<=e;d=add(d,1)){var bk=M[d]||emptyBucket(),n=normOf(wd(d));o.a+=bk.a;o.s+=bk.s;o.b+=bk.b;o.f+=bk.f;o.v+=bk.v;o.norm+=n;o.saldo+=bk.a+bk.s+bk.b+bk.v-n}
+  return o}
+function weekOf(s){var m=add(s,-wd(s));return agg(m,add(m,6))}
+function lunchDefault(ds){
+  var w=wd(ds),plan=D.lunchPlan||[];
+  if(w>=5||!plan[w])return false;
+  return!(M[ds]||emptyBucket()).rows.some(function(r){return r.type==='Arbejde'})}
+function pieceLabel(r){
+  if(r.type==='Arbejde')return r.start+'\u2013'+(r.slut||'nu');
+  if(r.start&&r.slut)return r.type+' '+r.start+'\u2013'+r.slut;
+  if(r.start&&!r.slut)return r.type+' '+r.start+'\u2013nu';
+  return r.type}
+function openPieceToday(){var b=M[D.today]||emptyBucket();return b.rows.filter(function(r){return r.open})[0]||null}
+function getCopyList(){
+  var b=M[D.today]||emptyBucket(),map={Arbejde:b.a,Syg:b.s,'Barn syg':b.b,Flex:b.f,Ferie:b.v},list=[];
+  COPY_ORDER.forEach(function(t){if(map[t])list.push([t,map[t]])});
+  return list;
 }
-function esc(s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+function rest(ds,excludeRow){
+  if(excludeRow===undefined)excludeRow=edit;
+  var b=M[ds]||emptyBucket(),o=0;
+  b.rows.forEach(function(r){if(r.row!==excludeRow)o+=hrs(r)});
+  return Math.max(0,normOf(wd(ds))-o)}
+function daySegs(bk){
+  if(!bk)return'';
+  var left=0,out='';
+  SEG_ORDER.forEach(function(ty){
+    var val=bk[KEY[ty]];
+    if(val>0){
+      var w=Math.min(100-left,val/10*100);
+      out+='<div class="fl" style="left:'+left+'%;width:'+w+'%;background:'+TCOL[ty]+'"></div>';
+      left+=w;
+    }
+  });
+  return out;
+}
 
-/* ---- Server-kald (fetch mod Apps Script, GET-only pga. CORS) ---- */
-function call(fn) {
-  var args = Array.prototype.slice.call(arguments, 1);
-  var my = ++seq;
-  $('busy').hidden = false;
-  var key = getKey();
-  if (!key) { $('busy').hidden = true; return; }
-  var url = BASE + '?api=1&fn=' + encodeURIComponent(fn) + '&key=' + encodeURIComponent(key) + '&args=' + encodeURIComponent(JSON.stringify(args));
-  fetch(url).then(function (r) { return r.json(); }).then(function (res) {
-    if (my !== seq) return;
-    $('busy').hidden = true;
-    if (res.error) {
-      if (res.error === 'Forkert kode.') localStorage.removeItem('trKey');
+/* ---- server (fetch mod Apps Script, GET-only pga. CORS) ---- */
+function call(fn){
+  var a=[].slice.call(arguments,1),my=++seq;$('busy').hidden=false;
+  var key=getKey();
+  if(!key){$('busy').hidden=true;return;}
+  var url=BASE+'?api=1&fn='+encodeURIComponent(fn)+'&key='+encodeURIComponent(key)+'&args='+encodeURIComponent(JSON.stringify(a));
+  fetch(url).then(function(r){return r.json()}).then(function(res){
+    if(my!==seq)return;$('busy').hidden=true;
+    if(res.error){
+      if(res.error==='Forkert kode.')localStorage.removeItem('trKey');
       toast(res.error);
-      if (fn !== 'getWeek') call('getWeek', S ? S.offset : 0);
+      if(fn!=='getData')call('getData');
       return;
     }
-    S = res.data; render();
-  }).catch(function () {
-    if (my !== seq) return;
-    $('busy').hidden = true;
-    toast('Kunne ikke kontakte serveren.');
+    D=res.data;render();
+  }).catch(function(){
+    if(my!==seq)return;$('busy').hidden=true;toast('Kunne ikke kontakte serveren.');
   });
 }
-function fetchEntry(date, cb) {
-  var key = getKey(); if (!key) return;
-  fetch(BASE + '?api=1&fn=getEntry&key=' + encodeURIComponent(key) + '&args=' + encodeURIComponent(JSON.stringify([date])))
-    .then(function (r) { return r.json(); }).then(function (res) { if (!res.error) cb(res.data); });
-}
-function toast(msg) {
-  var t = $('toast'); t.textContent = msg; t.classList.add('show');
-  clearTimeout(toast.t); toast.t = setTimeout(function () { t.classList.remove('show'); }, 3500);
-}
-
-/* ---- Beregninger ---- */
-function liveHours(d) {
-  var p = parts(d.date), t = d.start.split(':').map(Number);
-  var st = new Date(p[0], p[1] - 1, p[2], t[0], t[1]);
-  return Math.max(0, ((Date.now() - st) / 60000 - (d.lunch || 0)) / 60);
-}
-function hoursOf(d) { return d.open ? liveHours(d) : (d.hours || 0); }
-function todayEntry() { return S.days.filter(function (d) { return d.date === S.today; })[0]; }
-function stats() {
-  var total = 0, counted = 0, dayNorm = S.norm / 5, max = 0;
-  S.days.forEach(function (d) {
-    var h = d.type ? hoursOf(d) : 0; total += h; if (h > max) max = h;
-    if (d.wd < 5) {
-      if (d.date < S.today) counted++;
-      else if (d.date === S.today && d.type) counted++;
+function callFerie(from,to){
+  var my=++seq;$('busy').hidden=false;
+  var key=getKey();
+  if(!key){$('busy').hidden=true;return;}
+  var url=BASE+'?api=1&fn=saveVacationRange&key='+encodeURIComponent(key)+'&args='+encodeURIComponent(JSON.stringify([from,to]));
+  fetch(url).then(function(r){return r.json()}).then(function(res){
+    if(my!==seq)return;$('busy').hidden=true;
+    if(res.error){
+      if(res.error==='Forkert kode.')localStorage.removeItem('trKey');
+      toast(res.error);call('getData');return;
     }
+    var d=res.data,skipped=d.skipped||[],added=d.added||0;
+    delete d.skipped;delete d.added;
+    D=d;render();
+    if(skipped.length)toast('Registreret '+added+' dag(e). Sprunget over: '+skipped.join(', '));
+    else toast('Ferie registreret: '+added+' dag(e)');
+  }).catch(function(){
+    if(my!==seq)return;$('busy').hidden=true;toast('Kunne ikke kontakte serveren.');
   });
-  return { total: total, dayNorm: dayNorm, saldo: total - dayNorm * counted, scale: Math.max(10, Math.ceil(max)) };
 }
+function toast(m){var t=$('toast');t.textContent=m;t.hidden=false;clearTimeout(toast.t);toast.t=setTimeout(function(){t.hidden=true},3200)}
+function dirty(id){$(id).classList.add('dirty')}
+function clean(id){$(id).classList.remove('dirty')}
 
-/* ---- Tegning ---- */
-function render() {
-  if (!S) return;
-  var st = stats(), isNow = S.offset === 0;
-  $('wkTitle').textContent = 'Uge ' + S.week;
-  var a = S.days[0].date, b = S.days[6].date;
-  $('wkSub').textContent = parts(a)[1] === parts(b)[1]
-    ? parts(a)[2] + '.\u2013' + parts(b)[2] + '. ' + MON[parts(b)[1] - 1] + ' ' + parts(b)[0]
-    : dnum(a) + ' \u2013 ' + dnum(b) + ' ' + parts(b)[0];
-  $('today').hidden = !isNow;
-  $('back').hidden = isNow;
+/* ---- render ---- */
+function render(){
+  if(!D)return;build();
+  if(!ov.ref)setP(ov.p);
+  ['today','ov','cfg'].forEach(function(t){$('v-'+t).hidden=t!==tab});
+  document.querySelectorAll('nav.tabs button').forEach(function(b){b.classList.toggle('on',b.dataset.t===tab)});
+  if(tab==='today')rToday();else if(tab==='ov')rOv();else rCfg()}
 
-  if (isNow) {
-    var t = todayEntry(), wd = t.wd;
-    $('todayDate').textContent = DAYLONG[wd] + ' ' + dnum(S.today);
-    $('heroNum').textContent = fmt(t.type ? hoursOf(t) : 0);
-    var sub = 'Ikke startet endnu';
-    if (t.type === 'Arbejde' && t.open) {
-      var lm = t.lunch > 0 ? t.lunch : S.lunchMin;
-      var endMin = toMin(t.start) + Math.round(st.dayNorm * 60) + lm;
-      sub = 'Startet ' + t.start + '. Normtid nået ca. ' + pad(Math.floor(endMin / 60) % 24) + ':' + pad(endMin % 60);
-    } else if (t.type === 'Arbejde') {
-      sub = t.start + '\u2013' + t.slut + (t.lunch > 0 ? ', frokost trukket fra' : ', uden frokost');
-    } else if (t.type) {
-      sub = t.type + ' \u2013 ' + hm(t.hours || 0);
+function rToday(){
+  var t=D.today,b=M[t]||emptyBucket(),openRow=openPieceToday();
+  $('tDate').textContent=DL[wd(t)]+' '+U(t).getUTCDate()+'. '+MN[U(t).getUTCMonth()];
+
+  var heroVal,heroLabel;
+  if(openRow){heroVal=hrs(openRow);heroLabel=openRow.type==='Arbejde'?'timer arbejde':'timer '+openRow.type.toLowerCase()}
+  else{heroVal=b.a;heroLabel='timer arbejde'}
+  $('tNum').textContent=fmt(heroVal);$('tNumLabel').textContent=heroLabel;
+
+  var sub;
+  if(openRow){
+    if(openRow.type==='Arbejde'){
+      sub='Startet '+openRow.start;
+      var norm=normOf(wd(t));
+      if(norm>0){
+        var lm=openRow.lunch>0?openRow.lunch:0;
+        var endMin=toMin(openRow.start)+Math.round(norm*60)+lm;
+        sub+='. Normtid nået ca. '+pad(Math.floor(endMin/60)%24)+':'+pad(endMin%60);
+      }
+    }else{
+      sub=openRow.type+' siden '+openRow.start;
     }
-    $('heroSub').textContent = sub;
-    var go = $('go'), work = t.type === 'Arbejde';
-    go.className = 'go';
-    if (work && t.open) { go.textContent = 'Slut dagen'; go.classList.add('stop'); go.disabled = false; }
-    else if (work) { go.textContent = 'Dagen er afsluttet'; go.classList.add('done'); go.disabled = true; }
-    else { go.textContent = 'Start dagen'; go.disabled = false; }
-    $('resume').hidden = !(work && !t.open);
-    $('lunch').checked = work && t.lunch > 0;
-    $('lunch').disabled = !work;
-    $('lunchRow').classList.toggle('off', !work);
-    $('lunchTxt').textContent = 'Frokost (' + S.lunchMin + ' min)';
+  }else{
+    var p=[];if(b.s)p.push('Syg '+fmt(b.s));if(b.b)p.push('Barn syg '+fmt(b.b));if(b.f)p.push('Flex '+fmt(b.f));if(b.v)p.push('Ferie '+fmt(b.v));
+    sub=b.rows.length?(p.join(' \u00b7 ')||'Norm i dag: '+fmtN(normOf(wd(t)))+' t'):'Ikke startet endnu';
+  }
+  $('tSub').textContent=sub;
+
+  var ferieOpt=$('actType').querySelector('option[value="Ferie"]');
+  ferieOpt.disabled=!!openRow;
+  if(dropSel==='Ferie'&&openRow)dropSel='Arbejde';
+  $('actType').value=dropSel;
+
+  var showFerie=dropSel==='Ferie'&&!openRow;
+  $('feriePicker').hidden=!showFerie;
+  $('go').hidden=showFerie;
+  if(showFerie)updateFeriePreview();
+
+  if(!showFerie){
+    $('go').className='go';
+    if(!openRow){$('go').textContent='Stempel ind'}
+    else if(openRow.type===dropSel){$('go').textContent='Stempel ud';$('go').classList.add('stop')}
+    else{$('go').textContent='Skift aktivitet';$('go').classList.add('switch')}
   }
 
-  $('sumNum').textContent = fmt(st.total);
-  $('sumOf').textContent = 'af ' + fmt(S.norm).replace(',00', '');
-  var sal = $('saldo');
-  sal.textContent = fmtS(st.saldo);
-  sal.className = 'saldo-num ' + (st.saldo >= 0 ? 'pos' : 'neg');
+  var showLunch=openRow&&openRow.type==='Arbejde';
+  $('lunchRow').hidden=!showLunch;
+  if(showLunch){$('lunch').checked=openRow.lunch>0;$('lunchTxt').textContent='Frokost ('+D.lunchMin+' min)'}
 
-  $('rows').innerHTML = S.days.map(function (d) {
-    var has = !!d.type;
-    if (d.wd >= 5 && !has) return '';
-    var h = has ? hoursOf(d) : 0;
-    var cls = d.type === 'Syg' ? 'syg' : d.type === 'Fri' ? 'fri' : '';
-    var sub = '';
-    if (d.type === 'Arbejde') sub = d.start + '\u2013' + (d.slut || 'nu') + (d.lunch > 0 ? ', frokost' : '');
-    else if (d.type) sub = d.type;
-    else if (d.date <= S.today) sub = 'Ingen registrering';
-    var tick = d.wd < 5 ? '<i class="tick" style="left:' + Math.min(100, st.dayNorm / st.scale * 100) + '%"></i>' : '';
-    return '<button class="row' + (d.date === S.today ? ' today-row' : '') + '" data-date="' + d.date + '">' +
-      '<div><div class="d-name">' + DAY[d.wd] + '</div><div class="d-date">' + parts(d.date)[2] + '.</div></div>' +
-      '<div><div class="track"><div class="fill ' + cls + '" style="width:' + Math.min(100, h / st.scale * 100) + '%"></div>' + tick + '</div>' +
-      '<div class="d-sub">' + esc(sub) + '</div></div>' +
-      '<div class="d-val' + (has ? '' : ' none') + '">' + (has ? fmt(h) : '\u2013') + '</div></button>';
-  }).join('');
+  $('copy').disabled=!getCopyList().length;
 
-  $('foot').textContent = 'Normuge ' + fmt(S.norm).replace(',00', '') + ' timer, ' + fmt(st.dayNorm) + ' pr. dag';
+  var flagLong=D.longOn&&b.a>=D.longMax;
+  $('tFlag').hidden=!flagLong;
+  var showBanner=D.longOn&&openRow&&b.a>=(D.longMax+2);
+  $('tBanner').hidden=!showBanner;
+  if(showBanner)$('tBannerTxt').textContent='Du har arbejdet '+fmt(b.a)+' timer i dag, over grænsen på '+fmtN(D.longMax)+' timer. Vil du afslutte dagen?';
+
+  var showFill=!openRow&&b.rows.length>0&&rest(t,0)>0.004&&!dismissedToday;
+  $('tFillRest').hidden=!showFill;
+  if(showFill)$('tFillRestTxt').textContent='Der mangler '+fmtN(rest(t,0))+' timer i dag. Markér som:';
+
+  $('tSegs').innerHTML=b.rows.map(function(r){
+    var note=r.note?'<div class="mut">'+esc(r.note)+'</div>':'';
+    return'<button class="seg1" data-row="'+r.row+'"><span>'+pieceLabel(r)+note+'</span><b>'+fmt(hrs(r))+'</b></button>'
+  }).join('')||'<div class="mut" style="margin-top:6px">Ingen registreringer i dag</div>';
+  var w=weekOf(t);$('tWeek').innerHTML='Uge '+isoWk(t)+': '+fmt(w.a)+' arbejdstimer, saldo hidtil <b class="'+(w.saldo>=0?'pos':'neg')+'">'+sg(w.saldo)+'</b>'}
+
+function updateFeriePreview(){
+  if(!$('fFra').value)$('fFra').value=D.today;
+  if(!$('fTil').value)$('fTil').value=$('fFra').value;
+  var from=$('fFra').value,to=$('fTil').value;
+  if(to<from){$('feriePrev').textContent='Til-dato skal være efter fra-dato';return}
+  var d=from,days=0,sum=0;
+  while(d<=to){var w=wd(d);if(w<5){days++;sum+=D.norms[w]}d=add(d,1)}
+  $('feriePrev').textContent=days+' hverdag'+(days===1?'':'e')+' \u00d7 normtimer = '+fmtN(sum)+' timer i alt';
 }
+$('fFra').onchange=function(){if(!$('fTil').value||$('fTil').value<this.value)$('fTil').value=this.value;updateFeriePreview()};
+$('fTil').onchange=updateFeriePreview;
+$('feriegem').onclick=function(){
+  if(!$('busy').hidden)return;
+  var from=$('fFra').value,to=$('fTil').value;
+  if(!from||!to)return toast('Angiv fra- og til-dato');
+  if(to<from)return toast('Til-dato skal være efter fra-dato');
+  dropSel='Arbejde';
+  callFerie(from,to)};
 
-/* ---- Handlinger ---- */
-function patchToday(patch) {
-  var i = S.days.findIndex(function (d) { return d.date === S.today; });
-  S.days[i] = Object.assign({}, S.days[i], patch);
+function setP(p){ov.p=p;var t=D.today;ov.ref=p==='week'?add(t,-wd(t)):p==='month'?t.slice(0,7):t.slice(0,4)}
+function range(){
+  var r=ov.ref;
+  if(ov.p==='week')return[r,add(r,6)];
+  if(ov.p==='month'){var y=+r.slice(0,4),m=+r.slice(5);return[r+'-01',S_(new Date(Date.UTC(y,m,0)))]}
+  return[r+'-01-01',r+'-12-31']}
+function shift(n){
+  var r=ov.ref;
+  if(ov.p==='week')ov.ref=add(r,7*n);
+  else if(ov.p==='month'){var d=new Date(Date.UTC(+r.slice(0,4),+r.slice(5)-1+n,1));ov.ref=S_(d).slice(0,7)}
+  else ov.ref=String(+r+n)}
+function rOv(){
+  document.querySelectorAll('#ovP button').forEach(function(b){b.classList.toggle('on',b.dataset.p===ov.p)});
+  var rg=range(),s=agg(rg[0],rg[1]);
+  $('ovTtl').textContent=ov.p==='week'?'Uge '+isoWk(ov.ref)+' ('+rg[0].slice(8)+'.\u2013'+rg[1].slice(8)+'.)':ov.p==='month'?MN[+ov.ref.slice(5)-1]+' '+ov.ref.slice(0,4):ov.ref;
+  var c=[['Arbejde',fmt(s.a)],['Syg',fmt(s.s)],['Barn syg',fmt(s.b)],['Flex',fmt(s.f)],['Ferie/helligdag',fmt(s.v)],['Norm',fmt(s.norm)],['Saldo','<span class="'+(s.saldo>=0?'pos':'neg')+'">'+sg(s.saldo)+'</span>']];
+  if(ov.p==='year'){var used=D.rows.filter(function(r){return r.type==='Ferie'&&r.date.slice(0,4)===ov.ref}).length;c.push(['Feriedage',used+' af '+D.feriedage]);}
+  $('ovSum').innerHTML=c.map(function(x){return'<div class="cell"><span class="mut">'+x[0]+'</span><b>'+x[1]+'</b></div>'}).join('');
+  var h='';
+  if(ov.p==='year'){
+    for(var m=1;m<=12;m++){var f=ov.ref+'-'+pad(m)+'-01',e=S_(new Date(Date.UTC(+ov.ref,m,0))),a=agg(f,e);
+      h+='<button class="item" data-m="'+ov.ref+'-'+pad(m)+'" style="grid-template-columns:1fr auto auto"><b>'+MN[m-1]+'</b><span class="mut">'+sg(a.saldo)+'</span><span class="val" style="min-width:64px">'+fmt(a.a)+'</span></button>'}
+  }else{
+    for(var d=rg[0];d<=rg[1];d=add(d,1)){
+      var bk=M[d];if(wd(d)>=5&&!bk)continue;
+      var tot=bk?(bk.a+bk.s+bk.b+bk.f+bk.v):0,tg=[];
+      if(bk){
+        if(bk.s)tg.push('<span style="color:'+TTXT.Syg+'">Syg '+fmt(bk.s)+'</span>');
+        if(bk.b)tg.push('<span style="color:'+TTXT['Barn syg']+'">Barn syg '+fmt(bk.b)+'</span>');
+        if(bk.f)tg.push('<span style="color:'+TTXT.Flex+'">Flex '+fmt(bk.f)+'</span>');
+        if(bk.v)tg.push('<span style="color:'+TTXT.Ferie+'">Ferie '+fmt(bk.v)+'</span>');
+      }
+      var n=normOf(wd(d));
+      h+='<button class="item" data-d="'+d+'"><div><b>'+DN[wd(d)]+'</b><div class="mut">'+U(d).getUTCDate()+'.</div></div><div><div class="trk">'+daySegs(bk)+(n?'<i class="tk" style="left:'+n*10+'%"></i>':'')+'</div><div class="mut" style="margin-top:4px">'+(tg.join(' \u00b7 ')||(d<=D.today&&!bk?'Ingen registrering':'\u00a0'))+'</div></div><div class="val">'+(bk?fmt(tot):'\u2013')+'</div></button>'}}
+  $('ovList').innerHTML=h}
+
+function rCfg(){
+  $('cRows').innerHTML=[0,1,2,3,4].map(function(i){return'<label class="fld" style="display:grid;grid-template-columns:1fr 110px;gap:10px;align-items:center"><b>'+DL[i]+'</b><input class="inp c-n" inputmode="decimal" style="text-align:right" value="'+fmtN(D.norms[i])+'"></label>'}).join('');
+  var plan=D.lunchPlan||[];
+  $('cPlan').innerHTML=[0,1,2,3,4].map(function(i){return'<label class="lunch" style="margin-top:8px"><input type="checkbox" class="chk c-plan"'+(plan[i]?' checked':'')+'><span>'+DL[i]+'</span></label>'}).join('');
+  $('cLunch').value=D.lunchMin;
+  $('cLongOn').checked=!!D.longOn;
+  $('cLongMax').value=fmtN(D.longMax);
+  $('cFerie').value=D.feriedage;
+  var y=D.today.slice(0,4);
+  var used=D.rows.filter(function(r){return r.type==='Ferie'&&r.date.slice(0,4)===y}).length;
+  $('cFerieUsed').textContent='Feriedage i '+y+': brugt '+used+' af '+D.feriedage+' ('+Math.max(0,D.feriedage-used)+' tilbage)';
+  document.querySelectorAll('.c-n').forEach(function(i){i.oninput=function(){dirty('cSave');cSum()}});
+  document.querySelectorAll('.c-plan').forEach(function(c){c.onchange=function(){dirty('cSave')}});
+  $('cLunch').oninput=function(){dirty('cSave')};
+  $('cLongOn').onchange=function(){dirty('cSave')};
+  $('cLongMax').oninput=function(){dirty('cSave')};
+  $('cFerie').oninput=function(){dirty('cSave')};
+  cSum();clean('cSave')}
+function cNorms(){return[].map.call(document.querySelectorAll('.c-n'),function(i){return parseFloat(String(i.value).replace(',','.'))})}
+function cSum(){var n=cNorms();$('cSum').textContent=n.some(isNaN)?'Normuge: \u2013':'Normuge: '+fmtN(n.reduce(function(x,y){return x+y},0))+' timer'}
+$('cSave').onclick=function(){
+  if(!$('busy').hidden)return;
+  var n=cNorms(),l=parseInt($('cLunch').value,10);
+  if(n.some(function(v){return!(v>=0&&v<=24)}))return toast('Norm pr. dag skal være 0\u201324 timer');
+  if(!(l>=0&&l<240))return toast('Frokost skal være 0\u2013239 minutter');
+  var longOn=$('cLongOn').checked,longMax=parseFloat(String($('cLongMax').value).replace(',','.'));
+  if(!(longMax>0&&longMax<=24))return toast('Grænse skal være mellem 0 og 24 timer');
+  var feriedage=parseInt($('cFerie').value,10);
+  if(!(feriedage>=0&&feriedage<=60))return toast('Feriedage pr. år skal være mellem 0 og 60');
+  var plan=[].map.call(document.querySelectorAll('.c-plan'),function(c){return c.checked});
+  call('saveSettings',{norms:n,plan:plan,lunchMin:l,longOn:longOn,longMax:longMax,feriedage:feriedage})};
+
+/* ---- handlinger ---- */
+document.querySelectorAll('nav.tabs button').forEach(function(b){b.onclick=function(){tab=b.dataset.t;render()}});
+$('actType').onchange=function(){if(!$('busy').hidden){this.value=dropSel;return}dropSel=this.value;render()};
+$('go').onclick=function(){
+  if(!$('busy').hidden)return;
+  var openRow=openPieceToday();
+  if(!openRow){dismissedToday=false;call('checkIn',dropSel)}
+  else if(openRow.type===dropSel){dropSel='Arbejde';call('checkOut')}
+  else{dismissedToday=false;call('switchActivity',dropSel)}};
+$('tBannerBtn').onclick=function(){if(!$('busy').hidden)return;dropSel='Arbejde';call('checkOut')};
+$('lunch').onchange=function(){if(!$('busy').hidden){this.checked=!this.checked;return}call('setLunch',this.checked)};
+$('addPiece').onclick=function(){openDlg(D.today,0)};
+$('tSegs').onclick=function(e){if(!$('busy').hidden)return;var b=e.target.closest('[data-row]');if(b)openDlg(D.today,+b.dataset.row)};
+$('tFillRest').addEventListener('click',function(e){var b=e.target.closest('[data-fill]');if(!b)return;quickFillToday(b.dataset.fill)});
+$('tFillRestDismiss').onclick=function(){dismissedToday=true;render()};
+function quickFillToday(type){
+  if(!$('busy').hidden)return;
+  var h=rest(D.today,0);
+  if(!(h>0.004))return;
+  dismissedToday=true;
+  toast('Tilføjet: '+type+' '+fmtN(h)+' timer');
+  call('saveRow',{date:D.today,type:type,hours:h});
 }
-$('go').onclick = function () {
-  var t = todayEntry();
-  if (t.type === 'Arbejde' && t.open) {
-    var slut = nowHM();
-    patchToday({ open: false, slut: slut, hours: calc(t.start, slut, t.lunch) }); render();
-    call('endDay', S.offset);
-  } else {
-    patchToday({ type: 'Arbejde', start: nowHM(), slut: '', lunch: 0, hours: null, open: true }); render();
-    call('startDay', S.offset);
+document.querySelectorAll('#ovP button').forEach(function(b){b.onclick=function(){setP(b.dataset.p);render()}});
+$('ovPrev').onclick=function(){shift(-1);render()};$('ovNext').onclick=function(){shift(1);render()};
+$('ovList').onclick=function(e){var d=e.target.closest('[data-d]'),m=e.target.closest('[data-m]');if(d)openDay(d.dataset.d);else if(m){ov.p='month';ov.ref=m.dataset.m;render()}};
+
+function copyText(txt,label){
+  function fb(){var ta=document.createElement('textarea');ta.value=txt;ta.style.cssText='position:fixed;opacity:0';document.body.appendChild(ta);ta.select();var ok=false;try{ok=document.execCommand('copy')}catch(x){}document.body.removeChild(ta);return ok}
+  var msg=(label?'Kopieret ('+label+'): ':'Kopieret: ')+txt;
+  if(navigator.clipboard&&window.isSecureContext)navigator.clipboard.writeText(txt).then(function(){toast(msg)},function(){toast(fb()?msg:'Kunne ikke kopiere')});
+  else toast(fb()?msg:'Kunne ikke kopiere')}
+$('copy').onclick=function(){
+  var list=getCopyList();
+  if(!list.length)return toast('Ingen timer registreret i dag');
+  var item=list[copyIdx%list.length];copyIdx++;
+  var label=item[0],val=item[1];
+  if(label==='Arbejde'){
+    copyText(String(Math.round(val*100)/100).replace('.',','),label);
+  }else{
+    var norm=normOf(wd(D.today));
+    if(!(norm>0)){toast('Ingen normtid i dag at omregne fravær ud fra');return}
+    copyText(fmtDays(val/norm),label+' (dage)');
   }
 };
-$('resume').onclick = function () { patchToday({ open: true, slut: '', hours: null }); render(); call('resumeDay', S.offset); };
-$('lunch').onchange = function () {
-  var on = this.checked, t = todayEntry(), lunch = on ? S.lunchMin : 0;
-  patchToday({ lunch: lunch, hours: t.open ? null : calc(t.start, t.slut, lunch) }); render();
-  call('setLunch', on, S.offset);
-};
-$('prev').onclick = function () { call('getWeek', S.offset - 1); };
-$('next').onclick = function () { call('getWeek', S.offset + 1); };
-$('back').onclick = function () { call('getWeek', 0); };
-$('rows').onclick = function (e) {
-  var r = e.target.closest('.row'); if (r) openDlg(r.getAttribute('data-date'));
-};
-$('add').onclick = function () { openDlg(S.today); };
 
-/* ---- Dag-dialog ---- */
-var dlg = $('dlg');
-function typeVal() { return document.querySelector('input[name=fType]:checked').value; }
-function setType(v) {
-  document.querySelectorAll('input[name=fType]').forEach(function (r) { r.checked = r.value === v; });
-  $('workFields').hidden = v !== 'Arbejde';
-  $('hoursFields').hidden = v === 'Arbejde';
-  if (v !== 'Arbejde' && !$('fHours').value) $('fHours').value = fmt(S.norm / 5).replace('.', ',');
+/* ---- dialog ---- */
+var dlg=$('dlg');
+function derr(m){var el=$('dErr');el.textContent=m;el.hidden=false}
+function openDay(ds){var rs=(M[ds]||emptyBucket()).rows;openDlg(ds,rs.length?rs[0].row:0)}
+function updateVHours(){var ds=$('fDate').value,n=ds?normOf(wd(ds)):0;$('vHours').textContent=n>0?fmtN(n)+' timer':'Ingen normtid denne dag'}
+function updateFieldsVisibility(){
+  var abs=isAbsenceType(fType);
+  $('tMode').hidden=!abs;
+  $('timeFields').hidden=!(fType==='Arbejde'||(abs&&fMode==='time'));
+  $('lunchField').hidden=fType!=='Arbejde';
+  $('hF').hidden=!(abs&&fMode==='hours');
+  $('vF').hidden=fType!=='Ferie';
 }
-document.querySelectorAll('input[name=fType]').forEach(function (r) { r.onchange = function () { setType(typeVal()); }; });
-function fill(e) {
-  var type = e && e.type ? e.type : 'Arbejde';
-  $('fStart').value = e && e.start || '';
-  $('fSlut').value = e && e.slut || '';
-  $('fLunch').checked = e && e.type ? e.lunch > 0 : true;
-  $('fHours').value = e && e.type && e.type !== 'Arbejde' && e.hours != null ? String(e.hours).replace('.', ',') : '';
-  $('fDel').hidden = !(e && e.type);
-  armed = false; $('fDel').classList.remove('arm'); $('fDel').textContent = 'Slet dag';
-  setType(type);
+function updateCalc(){
+  var show=isAbsenceType(fType)&&fMode==='time';
+  if(!show){$('fCalc').hidden=true;return}
+  var h=calc($('fStart').value,$('fSlut').value,0);
+  if(h===null){$('fCalc').hidden=true;return}
+  $('fCalc').hidden=false;$('fCalc').textContent='Giver '+fmtN(h)+' timer';
 }
-function openDlg(date) {
-  $('fLunchTxt').textContent = 'Frokost (' + S.lunchMin + ' min)';
-  $('fDate').value = date;
-  $('dlgTitle').textContent = date === S.today ? 'I dag' : DAYLONG[(new Date(parts(date)[0], parts(date)[1] - 1, parts(date)[2]).getDay() + 6) % 7] + ' ' + dnum(date);
-  var d = S.days.filter(function (x) { return x.date === date; })[0];
-  fill(d);
-  if (!dlg.open) dlg.showModal();
+function setType(t,mode){
+  fType=t;
+  document.querySelectorAll('#fType button').forEach(function(b){b.classList.toggle('on',b.dataset.y===t)});
+  fMode=isAbsenceType(t)?(mode||'time'):null;
+  document.querySelectorAll('#tMode button').forEach(function(b){b.classList.toggle('on',b.dataset.m===fMode)});
+  updateFieldsVisibility();
+  if(t==='Ferie')updateVHours();
+  if(isAbsenceType(t)&&fMode==='hours'&&!$('fHours').value)fillRest();
+  updateCalc();
 }
-$('fDate').onchange = function () {
-  var date = this.value; if (!date) return;
-  var d = S.days.filter(function (x) { return x.date === date; })[0];
-  if (d) { fill(d); return; }
-  fetchEntry(date, function (e) { fill(e); });
-};
-$('fCancel').onclick = function () { dlg.close(); };
-dlg.addEventListener('click', function (e) { if (e.target === dlg) dlg.close(); });
-$('fSave').onclick = function () {
-  var type = typeVal(), date = $('fDate').value;
-  if (!date) { toast('Vælg en dato'); return; }
-  var e = { date: date, type: type };
-  if (type === 'Arbejde') {
-    e.start = $('fStart').value; e.slut = $('fSlut').value; e.lunch = $('fLunch').checked;
-    if (!e.start) { toast('Angiv starttid'); return; }
-    if (!e.slut && date !== S.today) { toast('Angiv sluttid'); return; }
-  } else {
-    var h = parseFloat(String($('fHours').value).replace(',', '.'));
-    if (!(h >= 0 && h <= 24)) { toast('Angiv timer mellem 0 og 24'); return; }
-    e.hours = h;
+document.querySelectorAll('#fType button').forEach(function(b){b.onclick=function(){setType(b.dataset.y);dirty('fSave')}});
+document.querySelectorAll('#tMode button').forEach(function(b){b.onclick=function(){if(!$('busy').hidden)return;setType(fType,b.dataset.m);dirty('fSave')}});
+function fillRest(){$('fHours').value=String(Math.round(rest($('fDate').value)*100)/100).replace('.',',')}
+$('fRest').onclick=function(){fillRest();dirty('fSave')};
+$('fStart').oninput=function(){dirty('fSave');updateCalc()};
+$('fSlut').oninput=function(){dirty('fSave');updateCalc()};
+$('fHours').oninput=function(){dirty('fSave')};
+$('fLunch').onchange=function(){dirty('fSave')};
+$('fNote').oninput=function(){dirty('fSave')};
+$('dFillRest').addEventListener('click',function(e){var b=e.target.closest('[data-dfill]');if(!b)return;quickFillDialog(b.dataset.dfill)});
+function quickFillDialog(type){
+  if(!$('busy').hidden)return;
+  var ds=$('fDate').value;
+  var h=rest(ds,0);
+  if(!(h>0.004))return;
+  dlg.close();
+  toast('Tilføjet: '+type+' '+fmtN(h)+' timer');
+  call('saveRow',{date:ds,type:type,hours:h});
+}
+function fill(e){
+  $('fStart').value=e&&e.start||'';$('fSlut').value=e&&e.slut||'';
+  $('fLunch').checked=e?e.lunch>0:lunchDefault($('fDate').value);
+  $('fLunchTxt').textContent='Frokost ('+D.lunchMin+' min)';
+  $('fHours').value=e&&e.type&&e.type!=='Arbejde'&&e.type!=='Ferie'&&!e.start&&e.hours!=null?String(e.hours).replace('.',','):'';
+  $('fNote').value=e&&e.note||'';
+  $('fDel').hidden=!e;armed=false;$('fDel').classList.remove('arm');$('fDel').textContent='Slet';
+}
+function openDlg(ds,row,type){
+  edit=row||0;$('dErr').hidden=true;
+  var r=row?D.rows.filter(function(x){return x.row===row})[0]:null;
+  $('fDate').value=ds;$('dTtl').textContent=DL[wd(ds)]+' '+U(ds).getUTCDate()+'. '+MN[U(ds).getUTCMonth()];
+  var rs=(M[ds]||emptyBucket()).rows;
+  $('dSegs').innerHTML=rs.map(function(x){return'<button class="seg1" data-row="'+x.row+'"><span>'+pieceLabel(x)+'</span><b>'+fmt(hrs(x))+'</b></button>'}).join('')+(rs.length?'<button class="seg1" data-row="0"><span>+ Nyt stykke</span></button>':'');
+
+  var canFillD=rest(ds,0)>0.004&&!(ds===D.today&&openPieceToday());
+  $('dFillRest').hidden=!canFillD;
+  if(canFillD)$('dFillRestTxt').textContent='Resten af dagen ('+fmtN(rest(ds,0))+' t):';
+
+  fill(r);
+  var initMode=(r&&r.start)?'time':'hours';
+  setType(r?r.type:(type||'Arbejde'),initMode);
+  if(row){clean('fSave')}else{dirty('fSave')}
+  if(!dlg.open)dlg.showModal()}
+$('dSegs').onclick=function(e){if(!$('busy').hidden)return;var b=e.target.closest('[data-row]');if(b)openDlg($('fDate').value,+b.dataset.row)};
+$('fDate').onchange=function(){if(this.value)openDay(this.value)};
+$('fCx').onclick=function(){dlg.close()};
+dlg.addEventListener('click',function(e){if(e.target===dlg)dlg.close()});
+$('fSave').onclick=function(){
+  if(!$('busy').hidden)return;
+  var date=$('fDate').value;if(!date)return derr('Vælg en dato');
+  var e={row:edit,date:date,type:fType,note:$('fNote').value.trim()};
+  if(fType==='Arbejde'){
+    e.start=$('fStart').value;e.slut=$('fSlut').value;e.lunch=$('fLunch').checked;
+    if(!e.start)return derr('Angiv starttid');if(!e.slut&&date!==D.today)return derr('Angiv sluttid');
+  }else if(fType==='Ferie'){
+    // server udregner timer ud fra dagens norm
+  }else{
+    if(fMode==='time'){
+      e.start=$('fStart').value;e.slut=$('fSlut').value;
+      if(!e.start)return derr('Angiv starttid');
+      if(!e.slut&&date!==D.today)return derr('Angiv sluttid, eller skift til Timetal');
+    }else{
+      var h=parseFloat(String($('fHours').value).replace(',','.'));if(!(h>=0&&h<=24))return derr('Angiv timer mellem 0 og 24');e.hours=h;
+    }
   }
-  dlg.close(); call('saveEntry', e, S.offset);
-};
-$('fDel').onclick = function () {
-  if (!armed) { armed = true; this.classList.add('arm'); this.textContent = 'Tryk igen for at slette'; return; }
-  dlg.close(); call('deleteEntry', $('fDate').value, S.offset);
-};
+  dlg.close();call('saveRow',e)};
+$('fDel').onclick=function(){
+  if(!$('busy').hidden)return;
+  if(!armed){armed=true;this.classList.add('arm');this.textContent='Tryk igen';return}
+  dlg.close();call('deleteRow',edit)};
 
-/* ---- Normuge ---- */
-var dn = $('dlgNorm');
-$('cfg').onclick = function () { $('nNorm').value = String(S.norm).replace('.', ','); dn.showModal(); };
-$('nCancel').onclick = function () { dn.close(); };
-dn.addEventListener('click', function (e) { if (e.target === dn) dn.close(); });
-$('nSave').onclick = function () {
-  var v = parseFloat(String($('nNorm').value).replace(',', '.'));
-  if (!(v > 0 && v <= 80)) { toast('Angiv en normuge mellem 1 og 80 timer'); return; }
-  dn.close(); call('saveNorm', v, S.offset);
-};
-
-/* ---- Service worker (gør appen installerbar) ---- */
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', function () {
-    navigator.serviceWorker.register('sw.js').catch(function () {});
-  });
+/* ---- service worker ---- */
+if('serviceWorker' in navigator){
+  window.addEventListener('load',function(){navigator.serviceWorker.register('sw.js').catch(function(){});});
 }
 
-/* ---- Start ---- */
-setInterval(function () { if (S && S.offset === 0 && todayEntry().open && !dlg.open) render(); }, 30000);
-document.addEventListener('visibilitychange', function () { if (!document.hidden && S && !dlg.open) call('getWeek', S.offset); });
-call('getWeek', 0);
+/* ---- start ---- */
+setInterval(function(){if(D&&tab==='today'&&!dlg.open&&openPieceToday())render()},30000);
+document.addEventListener('visibilitychange',function(){if(!document.hidden&&D&&!dlg.open)call('getData')});
+call('getData');
 </script>
 </body>
 </html>
